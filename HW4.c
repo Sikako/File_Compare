@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <ctype.h>
 #include <stdlib.h>
 #include "function.h"
 
@@ -6,8 +7,6 @@
 Subject: System Engineering
 Subscrition: It's a program that can compare two text files and store which line and which column in the other file
 Author: Sikako
-
-
 ----------------------------------------------------------------------------------------------------------------------*/
 
 
@@ -20,6 +19,8 @@ int main(){
  int  line;
  int  column;
  char char1, char2;
+ int new_line;
+ int first;
 
  printf("Start to compare %s and %s\n", filename1, filename2);
  printf("--------------------------------------------\n");
@@ -32,15 +33,41 @@ int main(){
  char1 = fgetc(fp1);
  char2 = fgetc(fp2);
 
+ first = 1;
+ column = 1;
  line = 1;
- fprintf(fp3, "Line %d\n", line);
+ new_line = 0;
  while( char1 != EOF && char2 != EOF){
-  if(char1 == '\n' && char2 == '\n'){
-   line += 1;								// new line
-   fprintf(fp3, "Line %d\n", line);
+  if(char1 != ' ' && char2 != ' ' && isspace(char1) && isspace(char2)){
+   new_line = 1;
+   line += 1;								   // new line
+   column = 1;								   // reset
+   if(!first){
+    fprintf(fp3, "\n");
+   }
+   first = 1;
   } 
+  if(char1 != char2){
+   if(first){
+    first = 0;
+    fprintf(fp3, "Line %d, column ", line);
+   }else{
+    fprintf(fp3, ", ");
+   }
+   fprintf(fp3, "%d->%c", column, char1);
+
+  }
+
+
+
   char1 = fgetc(fp1);
   char2 = fgetc(fp2);
+  column += 1;								   // new char
+
+  if(new_line){
+   printf("%c", char1);
+   new_line = 0;
+  }
  }
 
 
