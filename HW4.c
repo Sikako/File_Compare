@@ -2,10 +2,20 @@
 #include <stdlib.h>
 #include "function.h"
 
+/*----------------------------------------------------------------------------------------------------------------------
+Subject: System Engineering
+Subscrition: It's a program that can compare two text files and store which line and which column in the other file
+Author: Sikako
+
+
+----------------------------------------------------------------------------------------------------------------------*/
+
+
+
 int main(){
- char filename1[20] = "ex32_1.txt";
+ char filename1[20] = "ex32_1.txt";					// enter what text file you wanna compare
  char filename2[20] = "ex32_2.txt";
- char filename3[20] = "ans32.txt";
+ char filename3[20] = "ans32.txt";					// enter what text file you wanna store 
  FILE *fp1, *fp2, *fp3;
  int  line;
  int  column;
@@ -14,7 +24,7 @@ int main(){
  printf("Start to compare %s and %s\n", filename1, filename2);
  printf("--------------------------------------------\n");
 
-
+// open files
  fp1 = processFile( filename1, "r");
  fp2 = processFile( filename2, "r");
  fp3 = processFile( filename3, "w");
@@ -23,14 +33,15 @@ int main(){
  char2 = fgetc(fp2);
 
  line = 1;
- while( char1 != '\n'){
+ fprintf(fp3, "Line %d\n", line);
+ while( char1 != EOF && char2 != EOF){
+  if(char1 == '\n' && char2 == '\n'){
+   line += 1;								// new line
+   fprintf(fp3, "Line %d\n", line);
+  } 
   char1 = fgetc(fp1);
-  printf("%d", line);
+  char2 = fgetc(fp2);
  }
-
- line += 1;
-
- printf("\n %d\n", line);
 
 
  closeFile(fp1, filename1);
